@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>daily gift deals</title>
+    <title>Daily Gift Deals</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -64,11 +64,12 @@
         /* الهيدر */
         header {
             text-align: center;
-            padding: 60px 20px;
+            padding: 60px 20px 40px;
             z-index: 2;
+            max-width: 800px;
         }
         header h1 {
-            font-size: 3.5rem;
+            font-size: 3rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             background: linear-gradient(to right, var(--primary), #ffffff);
@@ -77,7 +78,7 @@
             text-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
             margin-bottom: 10px;
         }
-        header p { color: var(--text-muted); font-size: 1.1rem; }
+        header p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.6; }
 
         /* الشبكة */
         .grid-container {
@@ -201,11 +202,37 @@
             box-shadow: 0 0 20px var(--primary);
         }
 
+        /* Recent Winners Section (Animated) */
+        .winners-section {
+            width: 90%;
+            max-width: 600px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 0 auto 50px;
+            border: 1px solid rgba(255,255,255,0.05);
+            z-index: 2;
+        }
+        .winners-title {
+            text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .winner-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.9rem;
+        }
+        .winner-row:last-child { border-bottom: none; }
+        .winner-name { color: white; display: flex; align-items: center; gap: 8px; }
+        .winner-name i { color: #00ff88; }
+        .winner-prize { color: var(--primary); font-weight: bold; }
+        .winner-time { color: var(--text-muted); font-size: 0.8rem; }
+
         /* Animations */
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulseBg { 0% { opacity: 0.5; } 100% { opacity: 1; } }
         @keyframes stockPulse { 0% { opacity: 0.8; } 50% { opacity: 1; box-shadow: 0 0 15px var(--secondary); } 100% { opacity: 0.8; } }
         @keyframes pulseIcon { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        @keyframes fadeSlide { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .badge {
             position: absolute;
@@ -220,7 +247,19 @@
             box-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
         }
 
-        footer { margin-top: auto; padding: 20px; color: rgba(255,255,255,0.3); font-size: 0.8rem; }
+        footer { 
+            margin-top: auto; 
+            padding: 30px 20px; 
+            color: rgba(255,255,255,0.3); 
+            font-size: 0.8rem; 
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            width: 100%;
+            z-index: 2;
+        }
+        .footer-links { margin-top: 10px; }
+        .footer-links a { color: rgba(255,255,255,0.4); text-decoration: none; margin: 0 10px; transition: 0.3s; }
+        .footer-links a:hover { color: var(--primary); }
     </style>
 </head>
 <body>
@@ -232,14 +271,11 @@
     </div>
 
     <header>
-        <h1>Daily Gift Deals  <span style="color:var(--primary)">VIP</span></h1>
-        <p>Discover the best gift card deals, limited-time rewards, and exclusive offers updated daily.
-Choose your category below and claim your reward.</p>
+        <h1>Daily Gift Deals <span style="color:var(--primary)">VIP</span></h1>
+        <p>Discover the best gift card deals, limited-time rewards, and exclusive offers updated daily. Choose your category below and claim your reward.</p>
     </header>
 
     <div class="grid-container">
-
-      
 
         <div class="card">
             <span class="badge">GAMING</span>
@@ -320,19 +356,19 @@ Choose your category below and claim your reward.</p>
                 <a href="https://smrturl.co/a/sbf9d34ebef/7?s1=" class="btn-glow">Claim Reward</a>
             </div>
         </div>
-<div class="card">
-            <span class="badge">spots</span>
+        
+        <div class="card">
+            <span class="badge">SPOTS</span>
             <div class="card-header">
-                <img src="https://static.vecteezy.com/system/resources/thumbnails/019/956/196/small/nike-transparent-nike-free-free-png.png" alt="Food" class="card-logo" style="width: 80px;">
+                <img src="https://static.vecteezy.com/system/resources/thumbnails/019/956/196/small/nike-transparent-nike-free-free-png.png" alt="Nike" class="card-logo" style="width: 80px;">
             </div>
             <div class="card-body">
                 <div class="timer-box">
                     <i class="far fa-clock"></i> Ends in: <span class="countdown" data-time="1500"></span>
                 </div>
 
-                <h3 class="card-title"> Nike Gift Card</h3>
-                <p class="card-desc">Limited Nike card entries remaining! Join now before today's spots run out.
-</p>
+                <h3 class="card-title">Nike Gift Card</h3>
+                <p class="card-desc">Limited Nike card entries remaining! Join now before today's spots run out.</p>
                 
                 <span class="stock-text"><i class="fas fa-fire"></i> Limited Stock</span>
                 <div class="stock-wrapper"><div class="stock-level" style="width: 16%"></div></div>
@@ -342,12 +378,23 @@ Choose your category below and claim your reward.</p>
         </div>
     </div>
 
+    <div class="winners-section">
+        <div class="winners-title"><i class="fas fa-trophy" style="color:#ffd700"></i> Recent Claims (Live)</div>
+        <div id="winners-container">
+            </div>
+    </div>
+
     <footer>
-        &copy; 2025 Rewards Hub Inc. Secure Connection via SSL.
+        <p>&copy; 2025 Rewards Hub Inc. Secure Connection via SSL.</p>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a> | 
+            <a href="#">Terms of Use</a> | 
+            <a href="#">Contact Support</a>
+        </div>
     </footer>
 
     <script>
-        // إخفاء اللودر عند تحميل الصفحة
+        // إخفاء اللودر
         window.addEventListener('load', () => {
             const loader = document.getElementById('loader');
             loader.style.opacity = '0';
@@ -356,54 +403,75 @@ Choose your category below and claim your reward.</p>
 
         // سكربت العداد التنازلي
         function startCountdown(element) {
-            // توليد وقت عشوائي بين 15 دقيقة و 45 دقيقة بالثواني (إذا لم يوجد data-time)
             let time = element.getAttribute('data-time') ? parseInt(element.getAttribute('data-time')) : (900 + Math.floor(Math.random() * 1800));
-            
-            // دالة تحديث الوقت
             const updateTimer = () => {
                 const minutes = Math.floor(time / 60);
                 let seconds = time % 60;
-                
-                // إضافة صفر إذا كان الرقم أقل من 10
                 seconds = seconds < 10 ? '0' + seconds : seconds;
-                
                 element.innerHTML = `${minutes}:${seconds}`;
-                
-                if (time > 0) {
-                    time--;
-                } else {
-                    // إعادة ضبط الوقت عند الانتهاء (لوب)
-                    time = 900 + Math.floor(Math.random() * 1800);
-                }
+                if (time > 0) { time--; } else { time = 900 + Math.floor(Math.random() * 1800); }
             };
-
             setInterval(updateTimer, 1000);
-            updateTimer(); // تشغيل فوري لتجنب التأخير ثانية واحدة
+            updateTimer();
         }
 
-        // تشغيل العداد لكل العناصر
-        document.querySelectorAll('.countdown').forEach(timer => {
-            startCountdown(timer);
-        });
+        document.querySelectorAll('.countdown').forEach(timer => { startCountdown(timer); });
 
-        // سكربت الحركة ثلاثية الأبعاد (3D Tilt Effect)
+        // --- سكربت تحديث الفائزين (Targeting USA ONLY) ---
+        const fakeWinners = [
+            { name: "Jessica M. (CA)", prize: "Roblox $50" },
+            { name: "Tyler D. (TX)", prize: "Nike Gift Card" },
+            { name: "Ashley R. (FL)", prize: "Taco Bell Meal" },
+            { name: "Brandon K. (NY)", prize: "7-Eleven Card" },
+            { name: "Megan P. (OH)", prize: "Chick-fil-A" },
+            { name: "Joshua S. (WA)", prize: "Roblox Premium" },
+            { name: "Emily B. (IL)", prize: "Amazon $100" },
+            { name: "Ashley R. (FL)", prize: "Taco Bell Meal" },
+
+        ];
+
+        const container = document.getElementById('winners-container');
+
+        function createWinnerRow(winner) {
+            const timeAgo = Math.floor(Math.random() * 59) + 1; // وقت عشوائي بالثواني
+            return `
+                <div class="winner-row" style="animation: fadeSlide 0.5s ease-out">
+                    <div class="winner-name"><i class="fas fa-check-circle" style="color:#00ff88"></i> ${winner.name}</div>
+                    <div class="winner-prize">${winner.prize}</div>
+                    <div class="winner-time">${timeAgo}s ago</div>
+                </div>
+            `;
+        }
+
+        function updateWinners() {
+            let displayHTML = '';
+            // خلط المصفوفة عشوائياً لاختيار أسماء مختلفة
+            const shuffled = fakeWinners.sort(() => 0.5 - Math.random());
+            
+            // عرض 3 فائزين فقط
+            shuffled.slice(0, 3).forEach(winner => {
+                displayHTML += createWinnerRow(winner);
+            });
+
+            container.innerHTML = displayHTML;
+        }
+
+        // تشغيل التحديث لأول مرة وتكراره كل 4 ثواني
+        updateWinners();
+        setInterval(updateWinners, 4000);
+
+        // 3D Tilt Effect
         const cards = document.querySelectorAll('.card');
-
         cards.forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-                
-                // حساب زاوية الدوران
                 const xRotation = -1 * ((y - rect.height / 2) / 10);
                 const yRotation = (x - rect.width / 2) / 10;
-                
                 card.style.transform = `perspective(1000px) rotateX(${xRotation}deg) rotateY(${yRotation}deg) scale(1.02)`;
             });
-
             card.addEventListener('mouseleave', () => {
-                // إعادة الكارت لوضعه الطبيعي
                 card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
             });
         });
