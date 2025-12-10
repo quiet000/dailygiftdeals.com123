@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>daily gift deals</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0f0c29;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --primary: #00f2ff;
+            --secondary: #ff0055;
+            --text-main: #ffffff;
+            --text-muted: #8b9bb4;
+            --timer-bg: rgba(0, 242, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-main);
+            overflow-x: hidden;
+            perspective: 1000px;
+        }
+
+        /* خلفية متحركة */
+        .bg-animation {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 242, 255, 0.05) 0%, transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(255, 0, 85, 0.05) 0%, transparent 25%);
+            animation: pulseBg 10s infinite alternate;
+        }
+
+        /* شاشة التحميل */
+        .loader-wrapper {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #0f0c29;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        .spinner {
+            width: 50px; height: 50px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        /* الهيدر */
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            z-index: 2;
+        }
+        header h1 {
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(to right, var(--primary), #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+            margin-bottom: 10px;
+        }
+        header p { color: var(--text-muted); font-size: 1.1rem; }
+
+        /* الشبكة */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            width: 90%;
+            max-width: 1200px;
+            padding-bottom: 50px;
+            z-index: 2;
+        }
+
+        /* الكارت المتطور */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0);
+            transition: 0.3s;
+            pointer-events: none;
+        }
+        .card:hover::after {
+            box-shadow: inset 0 0 20px rgba(0, 242, 255, 0.1), 0 0 20px rgba(0, 242, 255, 0.2);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+        }
+
+        .card-header {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            border-radius: 15px;
+            margin-bottom: 15px;
+            transform: translateZ(20px);
+        }
+        
+        .card-logo {
+            width: 100px;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
+            transition: 0.3s;
+        }
+        .card:hover .card-logo { transform: scale(1.1) rotate(-5deg); }
+
+        .card-body { padding: 10px; text-align: center; transform: translateZ(30px); }
+        
+        /* تصميم العداد الجديد */
+        .timer-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            background: var(--timer-bg);
+            color: var(--primary);
+            padding: 8px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            box-shadow: 0 0 10px rgba(0, 242, 255, 0.1);
+        }
+        .timer-box i { animation: pulseIcon 1s infinite; }
+
+        .card-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 5px; }
+        .card-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
+
+        .stock-wrapper {
+            background: rgba(255,255,255,0.1);
+            height: 6px;
+            border-radius: 10px;
+            margin: 15px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .stock-level {
+            height: 100%;
+            background: var(--secondary);
+            width: 85%;
+            border-radius: 10px;
+            box-shadow: 0 0 10px var(--secondary);
+            animation: stockPulse 2s infinite;
+        }
+        .stock-text { font-size: 0.75rem; color: var(--secondary); display: block; text-align: right; margin-bottom: 5px; }
+
+        .btn-glow {
+            display: inline-block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            background: linear-gradient(90deg, transparent, rgba(0, 242, 255, 0.1), transparent);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn-glow:hover {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        /* Animations */
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulseBg { 0% { opacity: 0.5; } 100% { opacity: 1; } }
+        @keyframes stockPulse { 0% { opacity: 0.8; } 50% { opacity: 1; box-shadow: 0 0 15px var(--secondary); } 100% { opacity: 0.8; } }
+        @keyframes pulseIcon { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+
+        .badge {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: var(--secondary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            transform: translateZ(40px);
+            box-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
+        }
+
+        footer { margin-top: auto; padding: 20px; color: rgba(255,255,255,0.3); font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-animation"></div>
+
+    <div class="loader-wrapper" id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <header>
+        <h1>Daily Gift Deals  <span style="color:var(--primary)">VIP</span></h1>
+        <p>Discover the best gift card deals, limited-time rewards, and exclusive offers updated daily.
+Choose your category below and claim your reward.</p>
+    </header>
+
+    <div class="grid-container">
+
+      
+
+        <div class="card">
+            <span class="badge">GAMING</span>
+            <div class="card-header">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Roblox_logo_2015.png" alt="Roblox" class="card-logo">
+            </div>
+            <div class="card-body">
+                <div class="timer-box">
+                    <i class="far fa-clock"></i> Ends in: <span class="countdown" data-time="2400"></span>
+                </div>
+
+                <h3 class="card-title">Roblox Premium</h3>
+                <p class="card-desc">Limited Roblox card entries remaining! Claim your chance before it closes.</p>
+                
+                <span class="stock-text"><i class="fas fa-fire"></i> Limited Stock</span>
+                <div class="stock-wrapper"><div class="stock-level" style="width: 17%"></div></div>
+
+                <a href="https://smrturl.co/a/sbf9d34ebef/556?s1=" class="btn-glow">Claim Reward</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <span class="badge">FOOD</span>
+            <div class="card-header">
+                <img src="https://cdn.freebiesupply.com/images/large/2x/taco-bell-logo-png-transparent.png" alt="Food" class="card-logo" style="width: 80px;">
+            </div>
+            <div class="card-body">
+                <div class="timer-box">
+                    <i class="far fa-clock"></i> Ends in: <span class="countdown" data-time="900"></span>
+                </div>
+
+                <h3 class="card-title">Taco Bell Gift Card</h3>
+                <p class="card-desc">Hurry! Only a few Taco Bell rewards left. Enter now before today’s spots run out.</p>
+                
+               <span class="stock-text"><i class="fas fa-fire"></i> Limited Stock</span>
+                <div class="stock-wrapper"><div class="stock-level" style="width: 16%"></div></div>
+                
+                <a href="https://smrturl.co/a/sbf9d34ebef/91?s1=" class="btn-glow">Claim Reward</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <span class="badge">FOOD</span>
+            <div class="card-header">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/7-Eleven_logo_2021.svg" alt="Food" class="card-logo" style="width: 80px;">
+            </div>
+            <div class="card-body">
+                <div class="timer-box">
+                    <i class="far fa-clock"></i> Ends in: <span class="countdown" data-time="1200"></span>
+                </div>
+
+                <h3 class="card-title">7 Eleven Giftcard</h3>
+                <p class="card-desc">Hurry! Limited spots remaining for today’s 7-Eleven gift card entry.</p>
+                
+                <span class="stock-text"><i class="fas fa-fire"></i> Limited Stock</span>
+                <div class="stock-wrapper"><div class="stock-level" style="width: 12%"></div></div>
+
+                <a href="https://smrturl.co/a/sbf9d34ebef/62?s1=" class="btn-glow">Claim Reward</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <span class="badge">FOOD</span>
+            <div class="card-header">
+                <img src="https://www.freepnglogos.com/uploads/chick-fil-a-png-logo/chick-fil-a-race-series-png-logo-20.png" alt="Food" class="card-logo" style="width: 80px;">
+            </div>
+            <div class="card-body">
+                <div class="timer-box">
+                    <i class="far fa-clock"></i> Ends in: <span class="countdown" data-time="1500"></span>
+                </div>
+
+                <h3 class="card-title">Chick-fil-A Gift Card</h3>
+                <p class="card-desc">Last spots! Enter now for a chance to win a Chick-fil-A gift card before it sells out.</p>
+                
+                <span class="stock-text"><i class="fas fa-fire"></i> Limited Stock</span>
+                <div class="stock-wrapper"><div class="stock-level" style="width: 19%"></div></div>
+
+                <a href="https://smrturl.co/a/sbf9d34ebef/7?s1=" class="btn-glow">Claim Reward</a>
+            </div>
+        </div>
+<div class="card">
+            <span class="badge">spots</span>
+            <div class="card-header">
+                <img src="https://static.vecteezy.com/system/resources/thumbnails/019/956/196/small/nike-transparent-nike-free-free-png.png" alt="Food" class="card-logo" style="width: 80px;">
+            </div>
+            <div class="card-body">
+                <div class="timer-box">
+                    <i class="far fa-clock"></i> Ends in: <span class="countdown" data-time="1500"></span>
+                </div>
+
+                <h3 class="card-title"> Nike Gift Card</h3>
+                <p class="card-desc">Limited Nike card entries remaining! Join now before today's spots run out.
+</p>
+                
+                <span class="stock-text"><i class="fas fa-fire"></i> Limited Stock</span>
+                <div class="stock-wrapper"><div class="stock-level" style="width: 16%"></div></div>
+
+                <a href="https://smrturl.co/a/sbf9d34ebef/14565?s1=" class="btn-glow">Claim Reward</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 Rewards Hub Inc. Secure Connection via SSL.
+    </footer>
+
+    <script>
+        // إخفاء اللودر عند تحميل الصفحة
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            setTimeout(() => { loader.style.display = 'none'; }, 500);
+        });
+
+        // سكربت العداد التنازلي
+        function startCountdown(element) {
+            // توليد وقت عشوائي بين 15 دقيقة و 45 دقيقة بالثواني (إذا لم يوجد data-time)
+            let time = element.getAttribute('data-time') ? parseInt(element.getAttribute('data-time')) : (900 + Math.floor(Math.random() * 1800));
+            
+            // دالة تحديث الوقت
+            const updateTimer = () => {
+                const minutes = Math.floor(time / 60);
+                let seconds = time % 60;
+                
+                // إضافة صفر إذا كان الرقم أقل من 10
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+                
+                element.innerHTML = `${minutes}:${seconds}`;
+                
+                if (time > 0) {
+                    time--;
+                } else {
+                    // إعادة ضبط الوقت عند الانتهاء (لوب)
+                    time = 900 + Math.floor(Math.random() * 1800);
+                }
+            };
+
+            setInterval(updateTimer, 1000);
+            updateTimer(); // تشغيل فوري لتجنب التأخير ثانية واحدة
+        }
+
+        // تشغيل العداد لكل العناصر
+        document.querySelectorAll('.countdown').forEach(timer => {
+            startCountdown(timer);
+        });
+
+        // سكربت الحركة ثلاثية الأبعاد (3D Tilt Effect)
+        const cards = document.querySelectorAll('.card');
+
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // حساب زاوية الدوران
+                const xRotation = -1 * ((y - rect.height / 2) / 10);
+                const yRotation = (x - rect.width / 2) / 10;
+                
+                card.style.transform = `perspective(1000px) rotateX(${xRotation}deg) rotateY(${yRotation}deg) scale(1.02)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                // إعادة الكارت لوضعه الطبيعي
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
